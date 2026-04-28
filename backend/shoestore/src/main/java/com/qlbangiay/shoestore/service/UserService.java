@@ -1,7 +1,7 @@
-package com.shoestore.service;
+package com.qlbangiay.shoestore.service;
 
-import com.shoestore.entity.User;
-import com.shoestore.repository.UserRepository;
+import com.qlbangiay.shoestore.entity.User;
+import com.qlbangiay.shoestore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

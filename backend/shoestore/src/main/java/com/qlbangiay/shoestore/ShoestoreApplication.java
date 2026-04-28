@@ -1,4 +1,4 @@
-package com.shoestore;
+package com.qlbangiay.shoestore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

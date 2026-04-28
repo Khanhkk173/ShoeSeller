@@ -1,7 +1,7 @@
-package com.shoestore.controller;
+package com.qlbangiay.shoestore.controller;
 
-import com.shoestore.entity.User;
-import com.shoestore.service.UserService;
+import com.qlbangiay.shoestore.entity.User;
+import com.qlbangiay.shoestore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
