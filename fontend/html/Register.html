@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Kí</title>
+    <link rel="stylesheet" href="../Style/Register.css">
+    <link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="loginform">
+        <h1>Login</h1>
+        <div class="input_box">
+            <input type="text" placeholder="Email" id="email" required>
+            <i class="bx bx-envelope"></i>
+        </div>
+        <div class="input_box">
+            <input type="text" placeholder="Username" id="username" required>
+            <i class="bx bx-user"></i>
+        </div>
+        <div class="input_box">
+            <input type="password" class="password" id="pass" placeholder="Password">
+            <i class="bx bx-lock"></i>
+        </div>
+        <div class="input_box">
+            <input type="password" class="password" id="cfpass" placeholder="Confirm Password">
+            <i class="bx bx-lock"></i>
+        </div>
+        <div class="show_pass">
+            <label>
+                <input type="checkbox" onclick="togglePass()"> Show Password
+            </label>
+            <script src="../Script/Register.js"></script>
+        </div>
+        <button onclick="register()" class="login-bt">Register</button>
+        <div class="regis">
+            <p>Already have an account? <a href="../html/Login.html">Login</a></p>
+        </div>
+    </div>
+</body>
+
+</html>
