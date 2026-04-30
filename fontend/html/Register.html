@@ -11,7 +11,8 @@
 
 <body>
     <div class="loginform">
-        <h1>Login</h1>
+        <h1>Register</h1>
+        
         <div class="input_box">
             <input type="text" placeholder="Email" id="email" required>
             <i class="bx bx-envelope"></i>
@@ -21,24 +22,28 @@
             <i class="bx bx-user"></i>
         </div>
         <div class="input_box">
-            <input type="password" class="password" id="pass" placeholder="Password">
+            <input type="password" class="password" id="pass" placeholder="Password" required>
             <i class="bx bx-lock"></i>
         </div>
         <div class="input_box">
-            <input type="password" class="password" id="cfpass" placeholder="Confirm Password">
+            <input type="password" class="password" id="cfpass" placeholder="Confirm Password" required>
             <i class="bx bx-lock"></i>
         </div>
+        
         <div class="show_pass">
             <label>
                 <input type="checkbox" onclick="togglePass()"> Show Password
             </label>
-            <script src="../Script/Register.js"></script>
         </div>
+        
         <button onclick="register()" class="login-bt">Register</button>
+        
         <div class="regis">
             <p>Already have an account? <a href="../html/Login.html">Login</a></p>
         </div>
     </div>
+
+    <script src="../Script/Register.js"></script>
 </body>
 
 </html>

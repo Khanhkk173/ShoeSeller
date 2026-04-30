@@ -1,39 +1,57 @@
+// Login.js
+
 function togglePass() {
-    let p = document.getElementById("pass");
-    p.type = (p.type == "password") ? "text" : "password";
+    const pass = document.getElementById("pass");
+    if (pass) {
+        pass.type = pass.type === "password" ? "text" : "password";
+    }
 }
 
-function login() {
+// Hàm login chính
+async function login() {
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("pass").value.trim();
 
-    // Kiểm tra đầy đủ thông tin
+    // Kiểm tra dữ liệu đầu vào
     if (!username || !password) {
-        alert("Vui lòng nhập đầy đủ tài khoản và mật khẩu!");
+        alert("Vui lòng nhập đầy đủ username và password!");
         return;
     }
 
-    fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
-    })
-    .then(res => res.text())
-    .then(data => {
-        if (data === "Login success") {
-            localStorage.setItem("isLogin", "true");
-            localStorage.setItem("username", username);
-            window.location.href = "Dashboard.html";
+    const loginData = {
+        username: username,
+        password: password
+    };
+
+    try {
+        const response = await fetch('http://localhost:8080/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            console.log("Đăng nhập thành công:", result);
+            alert("Đăng nhập thành công!");
+
+            // Lưu thông tin user vào localStorage
+            if (result.data) {
+                localStorage.setItem('user', JSON.stringify(result.data));
+            }
+
+            // Chuyển hướng về trang chủ (sửa đường dẫn cho đúng với dự án của bạn)
+            window.location.href = "../html/Dashboard.html";  
+            // Hoặc: window.location.href = "index.html";
+
         } else {
-            alert("Sai tài khoản hoặc mật khẩu!");
+            alert(result.message || "Đăng nhập thất bại!");
         }
-    })
-    .catch(err => {
-        alert("Không thể kết nối đến server!");
-    });
+    } catch (error) {
+        console.error("Lỗi kết nối:", error);
+        alert("Không thể kết nối đến server. Vui lòng kiểm tra backend có đang chạy không!");
+    }
 }

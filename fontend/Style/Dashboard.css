@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+ @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 *{
     margin: 0;
@@ -200,6 +200,39 @@ body{
     font-size: 24px;
     font-weight: 600;
     color: var(--color-text-primary);
+}
+
+.top {
+    display: flex;
+    padding: 20px 100px;
+}
+.top-content {
+    margin: 20px 30px;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-text-primary);
+    font-size: 20px;
+    border: 1px solid var(--color-bg-secondary);
+    border-radius: 20px;
+    box-shadow: 0 3px 9px var(--color-shadow);
+}
+.top-content .noidung  {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 10px ;
+}
+.top-content i {
+    font-size: 50px;
+    color: #695cfe;
+}
+
+.top-content h3 {
+    font-weight: 600;
+}
+.bottom {
+    padding: 40px;
 }
 
 
