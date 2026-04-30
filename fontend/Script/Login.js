@@ -1,5 +1,3 @@
-// Login.js
-
 function togglePass() {
     const pass = document.getElementById("pass");
     if (pass) {
@@ -7,12 +5,10 @@ function togglePass() {
     }
 }
 
-// Hàm login chính
 async function login() {
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("pass").value.trim();
 
-    // Kiểm tra dữ liệu đầu vào
     if (!username || !password) {
         alert("Vui lòng nhập đầy đủ username và password!");
         return;
@@ -24,29 +20,25 @@ async function login() {
     };
 
     try {
-        const response = await fetch('http://localhost:8080/api/auth/login', {
-            method: 'POST',
+        const response = await fetch("http://localhost:8080/api/auth/login", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify(loginData)
         });
 
         const result = await response.json();
+        console.log("Login response:", result);
 
-        if (response.ok) {
-            console.log("Đăng nhập thành công:", result);
-            alert("Đăng nhập thành công!");
-
-            // Lưu thông tin user vào localStorage
+        if (response.ok && result.success) {
             if (result.data) {
-                localStorage.setItem('user', JSON.stringify(result.data));
+                localStorage.setItem("user", JSON.stringify(result.data));
             }
 
-            // Chuyển hướng về trang chủ (sửa đường dẫn cho đúng với dự án của bạn)
-            window.location.href = "../html/Dashboard.html";  
-            // Hoặc: window.location.href = "index.html";
-
+            alert(result.message || "Đăng nhập thành công!");
+            window.location.href = "../html/Dashboard.html";
         } else {
             alert(result.message || "Đăng nhập thất bại!");
         }

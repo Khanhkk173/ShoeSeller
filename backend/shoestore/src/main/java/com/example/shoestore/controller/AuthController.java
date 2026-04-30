@@ -19,16 +19,22 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<User>> login(
+    public ResponseEntity<ApiResponse<Object>> login(
             @RequestBody @Valid LoginRequest request,
             HttpSession session) {
+
         User user = authService.login(request);
+
         session.setAttribute("userId", user.getUserId());
         session.setAttribute("username", user.getUsername());
         session.setAttribute("role", user.getRole().name());
-        return ResponseEntity.ok(ApiResponse.ok("Đăng nhập thành công", user));
-    }
 
+        return ResponseEntity.ok(ApiResponse.ok("Đăng nhập thành công", java.util.Map.of(
+                "userId", user.getUserId(),
+                "username", user.getUsername(),
+                "role", user.getRole().name()
+        )));
+    }
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<User>> register(
             @RequestBody @Valid RegisterRequest request) {

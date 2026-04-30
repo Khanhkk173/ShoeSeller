@@ -13,7 +13,8 @@
 <body>
     <aside class="sidebar collapsed">
         <header class="sidebar-header">
-            <a href="https://web.facebook.com/TruongCongnghethongtinPhenikaa"><img src="../Image/avtdefault.jpg" alt="logo" class="header-logo"></a>
+            <a href="https://web.facebook.com/TruongCongnghethongtinPhenikaa"><img src="../Image/avtdefault.jpg"
+                    alt="logo" class="header-logo"></a>
             <button class="sidebar-toggle">
                 <i class="bx bx-menu-close"></i>
             </button>
@@ -57,11 +58,11 @@
                         </a>
                     </li>
                     <a href="#" class="menu-link">
-                            <i class="bx bx-pharmacy"></i>
-                            <span class="manu-lable">
-                                Nhập Hàng
-                            </span>
-                        </a>
+                        <i class="bx bx-pharmacy"></i>
+                        <span class="manu-lable">
+                            Nhập Hàng
+                        </span>
+                    </a>
 
                 </ul>
             </form>
@@ -81,10 +82,57 @@
             <a href="#">
                 <h2 class="trangchu">Trang Chủ</h2>
             </a>
-            <h2 id="welcome"></h2>
+            <div class="userlog">
+                <h2 id="welcome"></h2>
+                <a href="#"><img src="../Image/avt.jpg" alt=""></a>
+            </div>
         </div>
         <div class="container">
-
+            <div class="top-box">
+                <div class="content-top">
+                    <i class="bx bx-groceries"> </i>
+                    <div class="noidung">
+                        <label>Tổng doanh thu</label>
+                        <label id="doanhthu"></label>
+                    </div>
+                </div>
+                <div class="content-top">
+                    <i class="bx bx-cart-alt"> </i>
+                    <div class="noidung">
+                        <label>Tổng đơn hàng</label>
+                        <label id="donhang"></label>
+                    </div>
+                </div>
+                <div class="content-top">
+                    <i class="bx bx-sneaker"> </i>
+                    <div class="noidung">
+                        <label>Tổng sản phẩm</label>
+                        <label id="sanpham"></label>
+                    </div>
+                </div>
+                <div class="content-top">
+                    <i class="bx bx-store-alt"> </i>
+                    <div class="noidung">
+                        <label>Hàng tồn kho</label>
+                        <label id="tonkho"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-box">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Doanh thu 7 ngày qua</h3>
+                        <select id="rangeSelect">
+                            <option value="7" selected>7 ngày</option>
+                            <option value="14">14 ngày</option>
+                            <option value="30">30 ngày</option>
+                        </select>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="../Script/Dashboard.js"></script>
