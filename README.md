@@ -1,4 +1,4 @@
-Giới thiểu phần mềm: ShoeSeller là một trang web quản lí shop bán giày cho phép người dùng có thể xem tìm kiếm và quản lí shop giày
+Giới thiểu phần mềm: ShoeSeller là một trang web quản lí shop bán giày cho phép người dùng có thể xem tìm kiếm và quản lí shop giày.
 Dự án được xây dưng theo mô hình Backend(Java Spring boot) Frontend(Html,Css,JavaScript), phục vụ cho mục đích học tập và đồ án môn học.
 Thông tin sinh viên:
   Sinh viên 1: Bùi Khánh Hưng-MSV:24100417
