@@ -24,17 +24,21 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Order o WHERE o.status = :status")
     BigDecimal sumRevenueByStatus(@Param("status") Order.Status status);
 
+    @Query(value = """
+    SELECT DATE(order_date) as date, SUM(total_amount) as revenue
+    FROM orders
+    WHERE status = :status
+    GROUP BY DATE(order_date)
+    ORDER BY DATE(order_date)
+""", nativeQuery = true)
+    List<Object[]> revenueGroupByDate(@Param("status") String status);
+
+
     @Query("""
-    SELECT DATE(o.orderDate), COALESCE(SUM(o.totalAmount), 0)
+    SELECT COUNT(o)
     FROM Order o
     WHERE o.status = :status
-      AND o.orderDate BETWEEN :from AND :to
-    GROUP BY DATE(o.orderDate)
-    ORDER BY DATE(o.orderDate)
 """)
-    List<Object[]> sumRevenueGroupByDate(
-            @Param("status") Order.Status status,
-            @Param("from") LocalDateTime from,
-            @Param("to") LocalDateTime to
-    );
+    Long countByStatus(Order.Status status);
+
 }

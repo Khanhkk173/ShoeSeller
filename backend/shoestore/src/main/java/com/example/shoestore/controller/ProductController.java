@@ -2,6 +2,7 @@ package com.example.shoestore.controller;
 
 import com.example.shoestore.dto.request.ProductRequest;
 import com.example.shoestore.dto.response.ApiResponse;
+import com.example.shoestore.dto.response.ProductImportResponse;
 import com.example.shoestore.entity.Product;
 import com.example.shoestore.service.ProductService;
 import jakarta.validation.Valid;
@@ -52,4 +53,12 @@ public class ProductController {
         productService.delete(id);
         return ResponseEntity.ok(ApiResponse.ok("Xóa thành công", null));
     }
+    @GetMapping("/import")
+    public ResponseEntity<ApiResponse<List<ProductImportResponse>>> getProductsForImport() {
+        return ResponseEntity.ok(
+                ApiResponse.ok(productService.getProductsForImport())
+        );
+    }
+
+
 }

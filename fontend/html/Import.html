@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhập Hàng</title>
+    <link rel="stylesheet" href="../Style/Import.css">
+    <link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <aside class="sidebar collapsed">
+        <header class="sidebar-header">
+            <a href="https://web.facebook.com/TruongCongnghethongtinPhenikaa"><img src="../Image/avtdefault.jpg"
+                    alt="logo" class="header-logo"></a>
+            <button class="sidebar-toggle">
+                <i class="bx bx-menu-close"></i>
+            </button>
+        </header>
+
+        <div class="sidebar-content">
+            <form action="#">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="../html/Dashboard.html" class="menu-link">
+                            <i class="bx bx-home-alt"></i>
+                            <span class="manu-lable">
+                                Trang Chủ
+                            </span>
+                        </a>
+
+                    </li>
+                    <li class="menu-item">
+                        <a href="../html/Import.html" class="menu-link active">
+                            <i class="bx bx-pharmacy"></i>
+                            <span class="manu-lable">
+                                Nhập Hàng
+                            </span>
+                        </a>
+
+                    </li>
+                    <li class="menu-item">
+                        <a href="../html/Order.html" class="menu-link">
+
+                            <i class="bx bx-cart-alt"></i>
+                            <span class="manu-lable">
+                                Đơn Hàng
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../html/Statistics.html" class="menu-link">
+                            <i class="bx bx-chart-line"></i>
+                            <span class="manu-lable">
+                                Thống Kê
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="../html/Search.html" class="menu-link">
+                            <i class="bx bx-search-alt"></i>
+                            <span class="manu-lable">
+                                Tìm kiếm
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </form>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="logout">
+                <a href="#" onclick="logout()" class="logout-btn">
+                    <i class="bx bx-arrow-out-right-square-half"></i>
+                    <label class="label-logout">Logout</label>
+                </a>
+            </div>
+        </div>
+    </aside>
+    <div class="main-box">
+        <div class="header">
+            <a href="#">
+                <h2 class="nhaphang">Nhập Hàng</h2>
+            </a>
+            <div class="userlog">
+                <h2 id="welcome"></h2>
+                <a href="#"><img src="../Image/avt.jpg" alt=""></a>
+            </div>
+        </div>
+        <div class="import-page">
+            <div class="import-page">
+                <div class="import-card">
+                    <h3>Nhập hàng đã có trong kho</h3>
+
+                    <div class="import-row">
+                        <div class="form-group">
+                            <label>Sản phẩm</label>
+                            <select id="variantSelect"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số lượng nhập</label>
+                            <input type="number" id="quantity">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Giá nhập</label>
+                            <input type="number" id="price">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tổng tiền</label>
+                            <input type="number" id="total" readonly>
+                        </div>
+
+
+                    </div>
+
+                    <div class="action-row">
+                        <button class="btn-primary" onclick="submitImport()">Nhập hàng</button>
+                    </div>
+                </div>
+                <div class="import-card">
+                    <h3>Nhập sản phẩm mới</h3>
+
+                    <div class="import-new-grid">
+                        <!-- Upload ảnh sản phẩm -->
+                        <div class="form-group full">
+                            <label>Ảnh sản phẩm</label>
+                            <input type="file" id="imageInput" accept="image/*" multiple>
+                        </div>
+
+                        <div id="imagePreview" style="display:flex;gap:10px;margin-top:10px;"></div>
+                        <input id="newName" placeholder="Tên sản phẩm">
+                        <input id="newBrand" placeholder="Thương hiệu">
+                        <input id="newColor" placeholder="Màu sắc">
+                        <input id="newSize" type="number" placeholder="Size">
+                        <input id="newPrice" type="number" placeholder="Giá bán">
+                        <input id="newStock" type="number" placeholder="Tồn kho ban đầu">
+                    </div>
+
+                    <!-- ✅ ĐẶT NÚT CÙNG KIỂU - CÙNG PHÍA -->
+                    <div class="action-row">
+                        <button class="btn-primary" onclick="submitNewProduct()">
+                            Nhập sản phẩm mới
+                        </button>
+                    </div>
+                </div>
+                <div class="import-card">
+                    <h3>Danh sách sản phẩm trong kho</h3>
+
+                    <div class="search-row">
+                        <input type="text" id="searchProduct" placeholder="🔍 Tìm kiếm sản phẩm..."
+                            oninput="filterProducts()">
+                    </div>
+
+                    <table class="history-table" id="productTable">
+                        <thead>
+                            <tr>
+                                <th>Tên sản phẩm</th>
+                                <th>Thương hiệu</th>
+                                <th>Size</th>
+                                <th>Màu</th>
+                                <th>Giá bán</th>
+                                <th>Tồn kho</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productListBody"></tbody>
+                    </table>
+                </div>
+                <div class="import-card">
+                    <h3>Lịch sử xóa sản phẩm</h3>
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Tên sản phẩm</th>
+                                <th>Thương hiệu</th>
+                                <th>Size</th>
+                                <th>Màu</th>
+                                <th>Giá bán</th>
+                                <th>Thời gian xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deletedProductBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="import-card">
+                    <h3>Lịch sử nhập hàng</h3>
+
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Size</th>
+                                <th>Màu</th>
+                                <th>Số lượng</th>
+                                <th>Thời gian nhập</th>
+                            </tr>
+                        </thead>
+                        <tbody id="importHistoryBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../Script/Import.js"></script>
+</body>
+
+</html>

@@ -1,11 +1,14 @@
 package com.example.shoestore.service;
 
 import com.example.shoestore.dto.request.ProductRequest;
+import com.example.shoestore.dto.response.ProductImportResponse;
 import com.example.shoestore.entity.*;
 import com.example.shoestore.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +19,10 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductVariantRepository variantRepository;
+    private final ImportHistoryRepository importHistoryRepository;
+    private final ImportDetailRepository importDetailRepository;
+    private final OrderDetailRepository orderDetailRepository;
+    private final DeletedProductLogRepository deletedProductLogRepository;
 
     public List<Product> search(String keyword, String brand, Integer categoryId) {
         return productRepository.searchProducts(keyword, brand, categoryId);
@@ -43,7 +50,6 @@ public class ProductService {
 
         Product saved = productRepository.save(product);
 
-        // Lưu variants
         if (request.getVariants() != null) {
             List<ProductVariant> variants = request.getVariants().stream()
                     .map(v -> ProductVariant.builder()
@@ -57,7 +63,6 @@ public class ProductService {
             variantRepository.saveAll(variants);
         }
 
-        // Lưu images
         if (request.getImageUrls() != null) {
             List<ProductImage> images = request.getImageUrls().stream()
                     .map(url -> ProductImage.builder()
@@ -88,13 +93,62 @@ public class ProductService {
 
     @Transactional
     public void delete(Integer id) {
-        if (!productRepository.existsById(id)) {
-            throw new RuntimeException("Không tìm thấy sản phẩm id=" + id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm id=" + id));
+
+        List<ProductVariant> variants = variantRepository.findByProductProductId(id);
+
+        // ✅ Ghi log xóa cho từng variant trước khi xóa
+        for (ProductVariant variant : variants) {
+            DeletedProductLog log = DeletedProductLog.builder()
+                    .productName(product.getName())
+                    .brand(product.getBrand())
+                    .size(variant.getSize())
+                    .color(variant.getColor())
+                    .price(variant.getPrice())
+                    .deletedAt(LocalDateTime.now())
+                    .build();
+            deletedProductLogRepository.save(log);
+
+            // Xóa các bảng con tham chiếu variant
+            orderDetailRepository.deleteByVariant(variant);
+            importDetailRepository.deleteByVariant(variant);
+            importHistoryRepository.deleteByVariant(variant);
         }
-        productRepository.deleteById(id);
+
+        variantRepository.deleteAll(variants);
+        productRepository.delete(product);
     }
 
     public List<Product> findAll() {
         return productRepository.findAll();
+    }
+
+    public List<ProductImportResponse> getProductsForImport() {
+        List<Product> products = productRepository.findAll();
+
+        return products.stream().map(p -> {
+            ProductImportResponse dto = new ProductImportResponse();
+            dto.setProductId(p.getProductId());
+            dto.setName(p.getName());
+
+            List<ProductImportResponse.VariantResponse> variants =
+                    variantRepository.findByProductProductId(p.getProductId())
+                            .stream()
+                            .map(v -> {
+                                ProductImportResponse.VariantResponse vr =
+                                        new ProductImportResponse.VariantResponse();
+                                vr.setVariantId(v.getVariantId());
+                                vr.setSize(v.getSize());
+                                vr.setColor(v.getColor());
+                                vr.setStock(v.getStock());
+                                vr.setPrice(v.getPrice());
+                                return vr;
+                            })
+                            .collect(Collectors.toList());
+
+            dto.setVariants(variants);
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

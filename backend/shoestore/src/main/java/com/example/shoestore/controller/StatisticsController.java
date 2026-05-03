@@ -1,11 +1,10 @@
 package com.example.shoestore.controller;
 
-import com.example.shoestore.dto.response.ApiResponse;
 import com.example.shoestore.dto.response.DailyRevenueResponse;
 import com.example.shoestore.dto.response.OverviewStatisticsResponse;
+import com.example.shoestore.dto.response.TopProductResponse;
 import com.example.shoestore.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,16 +16,21 @@ public class StatisticsController {
 
     private final StatisticsService statisticsService;
 
+    // ✅ CHỈ 1 ENDPOINT OVERVIEW
     @GetMapping("/overview")
-    public ResponseEntity<ApiResponse<OverviewStatisticsResponse>> getOverview() {
-        OverviewStatisticsResponse data = statisticsService.getOverviewStatistics();
-        return ResponseEntity.ok(ApiResponse.ok(data));
+    public OverviewStatisticsResponse getOverview() {
+        return statisticsService.getOverview();
     }
-    @GetMapping("/revenue-chart")
-    public ResponseEntity<ApiResponse<List<DailyRevenueResponse>>> getRevenueChart(
-            @RequestParam(defaultValue = "7") int days) {
-        return ResponseEntity.ok(
-                ApiResponse.ok(statisticsService.getRevenueByLastDays(days))
-        );
+
+    // ✅ DOANH THU THEO NGÀY
+    @GetMapping("/revenue")
+    public List<DailyRevenueResponse> revenue() {
+        return statisticsService.revenueByDate();
+    }
+
+    // ✅ TOP SẢN PHẨM
+    @GetMapping("/top-products")
+    public List<TopProductResponse> topProducts() {
+        return statisticsService.topProducts();
     }
 }

@@ -1,99 +1,113 @@
 package com.example.shoestore.service;
 
-import com.example.shoestore.dto.request.OrderRequest;
-import com.example.shoestore.entity.*;
-import com.example.shoestore.repository.*;
+import com.example.shoestore.dto.request.CreateOrderRequest;
+import com.example.shoestore.entity.Order;
+import com.example.shoestore.entity.OrderDetail;
+import com.example.shoestore.entity.ProductVariant;
+import com.example.shoestore.repository.OrderDetailRepository;
+import com.example.shoestore.repository.OrderRepository;
+import com.example.shoestore.repository.ProductVariantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final CustomerRepository customerRepository;
-    private final ProductVariantRepository variantRepository;
-
-    public List<Order> findAll() {
-        return orderRepository.findAll();
-    }
-
-    public Order findById(Integer id) {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng id=" + id));
-    }
-
-    public List<Order> findByStatus(String status) {
-        return orderRepository.findByStatus(Order.Status.valueOf(status));
-    }
+    private final OrderDetailRepository orderDetailRepository;
+    private final ProductVariantRepository productVariantRepository;
 
     @Transactional
-    public Order create(OrderRequest request) {
-        // Tìm hoặc tạo khách hàng theo số điện thoại
-        Customer customer = customerRepository
-                .findByPhone(request.getCustomerPhone())
-                .orElseGet(() -> customerRepository.save(
-                        Customer.builder()
-                                .name(request.getCustomerName())
-                                .phone(request.getCustomerPhone())
-                                .email(request.getCustomerEmail())
-                                .address(request.getCustomerAddress())
-                                .build()
-                ));
+    public Order createOrder(CreateOrderRequest request) {
 
-        // Tạo đơn hàng
+
         Order order = Order.builder()
-                .customer(customer)
-                .status(Order.Status.pending)
+                .orderDate(LocalDateTime.now())
+                .status(Order.Status.PENDING) // ✅ FIX Ở ĐÂY
                 .totalAmount(BigDecimal.ZERO)
                 .build();
 
-        Order savedOrder = orderRepository.save(order);
 
-        // Tạo chi tiết đơn hàng và tính tổng tiền
-        final BigDecimal[] total = {BigDecimal.ZERO};
+        order = orderRepository.save(order);
 
-        List<OrderDetail> details = request.getItems().stream().map(item -> {
-            ProductVariant variant = variantRepository.findById(item.getVariantId())
-                    .orElseThrow(() -> new RuntimeException(
-                            "Không tìm thấy biến thể id=" + item.getVariantId()));
+        BigDecimal total = BigDecimal.ZERO;
 
-            // Kiểm tra tồn kho
+        for (CreateOrderRequest.Item item : request.getItems()) {
+
+            ProductVariant variant = productVariantRepository.findById(item.getVariantId())
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm"));
+
             if (variant.getStock() < item.getQuantity()) {
-                throw new RuntimeException(
-                        "Sản phẩm " + variant.getProduct().getName() + " không đủ hàng");
+                throw new RuntimeException("Không đủ tồn kho");
             }
 
             // Trừ kho
             variant.setStock(variant.getStock() - item.getQuantity());
-            variantRepository.save(variant);
+            productVariantRepository.save(variant);
 
-            BigDecimal lineTotal = variant.getPrice()
-                    .multiply(BigDecimal.valueOf(item.getQuantity()));
-            total[0] = total[0].add(lineTotal);
+            BigDecimal price = variant.getPrice();
+            BigDecimal itemTotal = price.multiply(BigDecimal.valueOf(item.getQuantity()));
+            total = total.add(itemTotal);
 
-            return OrderDetail.builder()
-                    .order(savedOrder)
+            OrderDetail detail = OrderDetail.builder()
+                    .order(order)
                     .variant(variant)
                     .quantity(item.getQuantity())
-                    .price(variant.getPrice())
+                    .price(price)
                     .build();
-        }).collect(Collectors.toList());
 
-        savedOrder.setOrderDetails(details);
-        savedOrder.setTotalAmount(total[0]);
+            orderDetailRepository.save(detail);
+        }
 
-        return orderRepository.save(savedOrder);
+        order.setTotalAmount(total);
+        return orderRepository.save(order);
+    }
+
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    public List<OrderDetail> getOrderDetails(Integer orderId) {
+        return orderDetailRepository.findByOrderOrderId(orderId);
     }
 
     @Transactional
-    public Order updateStatus(Integer id, String status) {
-        Order order = findById(id);
-        order.setStatus(Order.Status.valueOf(status));
-        return orderRepository.save(order);
+    public void cancelOrder(Integer orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
+
+        if (order.getStatus() != Order.Status.PENDING) {
+            throw new RuntimeException("Chỉ huỷ được đơn PENDING");
+        }
+
+        List<OrderDetail> details = orderDetailRepository.findByOrderOrderId(orderId);
+
+        for (OrderDetail d : details) {
+            ProductVariant v = d.getVariant();
+            v.setStock(v.getStock() + d.getQuantity());
+            productVariantRepository.save(v);
+        }
+
+        order.setStatus(Order.Status.CANCELLED);
+        orderRepository.save(order);
+    }
+    @Transactional
+    public void completeOrder(Integer orderId) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
+
+        if (order.getStatus() != Order.Status.PENDING) {
+            throw new RuntimeException("Chỉ có thể hoàn thành đơn PENDING");
+        }
+
+        order.setStatus(Order.Status.COMPLETED);
+        orderRepository.save(order);
     }
 }

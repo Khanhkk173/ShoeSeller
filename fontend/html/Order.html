@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Chủ</title>
-    <link rel="stylesheet" href="../Style/Dashboard.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Đơn Hàng</title>
+    <link rel="stylesheet" href="../Style/Order.css">
     <link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
 </head>
 
@@ -24,7 +23,7 @@
             <form action="#">
                 <ul class="menu-list">
                     <li class="menu-item" id="menu-home">
-                        <a href="../html/Dashboard.html" class="menu-link active">
+                        <a href="../html/Dashboard.html" class="menu-link">
                             <i class="bx bx-home-alt"></i>
                             <span class="manu-lable">
                                 Trang Chủ
@@ -33,7 +32,7 @@
 
                     </li>
                     <li class="menu-item" id="menu-import">
-                        <a href="../html/Import.html" class="menu-link">
+                        <a href="../html/Import.html" class="menu-link ">
                             <i class="bx bx-pharmacy"></i>
                             <span class="manu-lable">
                                 Nhập Hàng
@@ -42,7 +41,7 @@
 
                     </li>
                     <li class="menu-item" id="menu-orders">
-                        <a href="../html/Order.html" class="menu-link">
+                        <a href="../html/Order.html" class="menu-link active">
 
                             <i class="bx bx-cart-alt"></i>
                             <span class="manu-lable">
@@ -83,7 +82,7 @@
     <div class="main-box">
         <div class="header">
             <a href="#">
-                <h2 class="trangchu">Trang Chủ</h2>
+                <h2 class="trangchu">Đơn hàng</h2>
             </a>
             <div class="userlog">
                 <h2 id="welcome"></h2>
@@ -91,54 +90,85 @@
             </div>
         </div>
         <div class="container">
-            <div class="top-box">
-                <div class="content-top">
-                    <i class="bx bx-groceries"> </i>
-                    <div class="noidung">
-                        <label>Tổng doanh thu</label>
-                        <label id="doanhthu"></label>
+            <div class="order-page">
+
+                <div class="order-card">
+                    <h3>Tạo đơn hàng</h3>
+
+                    <table class="order-table">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Giá</th>
+                                <th>Thành tiền</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderItemsBody">
+                        </tbody>
+                    </table>
+
+                    <button class="btn-add" onclick="addRow()">+ Thêm sản phẩm</button>
+
+                    <div class="order-summary">
+                        <span>Tổng tiền:</span>
+                        <strong id="totalAmount">0 ₫</strong>
+                    </div>
+
+                    <div class="action-row">
+                        <button class="btn-primary" onclick="createOrder()">Tạo đơn hàng</button>
                     </div>
                 </div>
-                <div class="content-top">
-                    <i class="bx bx-cart-alt"> </i>
-                    <div class="noidung">
-                        <label>Tổng đơn hàng</label>
-                        <label id="donhang"></label>
-                    </div>
-                </div>
-                <div class="content-top">
-                    <i class="bx bx-sneaker"> </i>
-                    <div class="noidung">
-                        <label>Tổng sản phẩm</label>
-                        <label id="sanpham"></label>
-                    </div>
-                </div>
-                <div class="content-top">
-                    <i class="bx bx-store-alt"> </i>
-                    <div class="noidung">
-                        <label>Hàng tồn kho</label>
-                        <label id="tonkho"></label>
-                    </div>
-                </div>
+
             </div>
-            <div class="bottom-box">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3>Doanh thu 7 ngày qua</h3>
-                        <select id="rangeSelect">
-                            <option value="7" selected>7 ngày</option>
-                            <option value="14">14 ngày</option>
-                            <option value="30">30 ngày</option>
-                        </select>
-                    </div>
-                    <div class="chart-body">
-                        <canvas id="revenueChart"></canvas>
+            <div class="order-history-page">
+
+                <div class="order-history-card">
+                    <h3>Lịch sử đơn hàng</h3>
+
+                    <table class="order-history-table">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Ngày đặt</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersBody">
+                            <!-- JS render -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Modal chi tiết đơn -->
+                <div id="orderDetailModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <h4>Chi tiết đơn hàng</h4>
+
+                        <table class="order-detail-table">
+                            <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>Size</th>
+                                    <th>Màu</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orderDetailBody"></tbody>
+                        </table>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-    <script src="../Script/Dashboard.js"></script>
+
+    <script src="../Script/Order.js"></script>
 </body>
 
 </html>

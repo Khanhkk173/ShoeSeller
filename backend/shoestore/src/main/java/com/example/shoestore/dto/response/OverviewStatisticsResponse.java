@@ -16,4 +16,7 @@ public class OverviewStatisticsResponse {
     private Long totalOrders;
     private Long totalProducts;
     private Long stockQuantity;
+    private Long totalSold;
+    private Long currentStock;
+
 }

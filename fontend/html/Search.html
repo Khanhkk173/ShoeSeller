@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm Kiếm Sản Phẩm</title>
+    <link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../Style/Search.css">
+</head>
+<body>
+    <aside class="sidebar collapsed">
+        <header class="sidebar-header">
+            <a href="https://web.facebook.com/TruongCongnghethongtinPhenikaa">
+                <img src="../Image/avtdefault.jpg" alt="logo" class="header-logo">
+            </a>
+            <button class="sidebar-toggle">
+                <i class="bx bx-menu-close"></i>
+            </button>
+        </header>
+
+        <div class="sidebar-content">
+            <form action="#">
+                <ul class="menu-list">
+                    <li class="menu-item" id="menu-home">
+                        <a href="../html/Dashboard.html" class="menu-link">
+                            <i class="bx bx-home-alt"></i>
+                            <span class="manu-lable">Trang Chủ</span>
+                        </a>
+                    </li>
+                    <li class="menu-item" id="menu-import">
+                        <a href="../html/Import.html" class="menu-link">
+                            <i class="bx bx-pharmacy"></i>
+                            <span class="manu-lable">Nhập Hàng</span>
+                        </a>
+                    </li>
+                    <li class="menu-item" id="menu-orders">
+                        <a href="../html/Order.html" class="menu-link">
+                            <i class="bx bx-cart-alt"></i>
+                            <span class="manu-lable">Đơn Hàng</span>
+                        </a>
+                    </li>
+                    <li class="menu-item" id="menu-statistics">
+                        <a href="../html/Statistics.html" class="menu-link">
+                            <i class="bx bx-chart-line"></i>
+                            <span class="manu-lable">Thống Kê</span>
+                        </a>
+                    </li>
+                    <li class="menu-item" id="menu-search">
+                        <a href="../html/Search.html" class="menu-link active">
+                            <i class="bx bx-search-alt"></i>
+                            <span class="manu-lable">Tìm kiếm</span>
+                        </a>
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="logout">
+                <a href="#" onclick="logout()" class="logout-btn">
+                    <i class="bx bx-arrow-out-right-square-half"></i>
+                    <label class="label-logout">Logout</label>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main-box">
+        <div class="header">
+            <a href="#">
+                <h2 class="trangchu">Tìm Kiếm Sản Phẩm</h2>
+            </a>
+            <div class="userlog">
+                <h2 id="welcome"></h2>
+                <a href="#"><img src="../Image/avt.jpg" alt=""></a>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <i class="bx bx-search"></i>
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Nhập tên sản phẩm cần tìm..."
+                    autocomplete="off"
+                />
+                <button class="btn-search" onclick="handleSearch()">
+                    <i class="bx bx-search-alt"></i>
+                    Tìm kiếm
+                </button>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="result-area" id="resultArea">
+            <div class="hint-state">
+                <i class="bx bx-search-alt-2"></i>
+                <p>Nhập tên sản phẩm để bắt đầu tìm kiếm</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../Script/Search.js"></script>
+</body>
+</html>

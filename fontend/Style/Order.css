@@ -1,4 +1,4 @@
- @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 *{
     margin: 0;
@@ -212,85 +212,231 @@ body{
     border-radius: 999px;
     padding: 10px;
 }
-
-.top-box {
-    display: flex;
-    padding: 20px 100px;
-    display: flex;
-    justify-content: center;  /* căn ngang */
-    align-items: center;
-    justify-content: space-between; /* cách đều */
-    gap: 20px; /* khoảng cách giữa các box */
-    flex-wrap: wrap; /* xuống dòng nếu màn nhỏ */
-}
-.content-top {
-    margin: 20px 30px;
-    padding: 20px 30px;
-    justify-content: space-between;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--color-text-primary);
-    font-size: 20px;
-    border: 1px solid var(--color-bg-secondary);
-    border-radius: 20px;
-    box-shadow: 0 3px 9px var(--color-shadow);
-}
-.content-top .noidung  {
-    display: flex;
-    flex-direction: column;
-    padding: 0px 10px ;
-}
-.content-top i {
-    font-size: 50px;
-    color: #695cfe;
+.order-page {
+    margin-left: 50px;
+    padding: 24px 50px;
 }
 
-#doanhthu, #donhang, #sanpham, #tonkho {
-    font-weight: 600;
-}
-.bottom-box {
-    display: flex;
-    justify-content: center;  /* căn ngang */
-    align-items: center;
-}
-
-.chart-card {
+.order-card {
     background: #fff;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-    width: 95%;
-    margin-left: 80px;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
 }
 
-.chart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.order-card h3 {
+    font-size: 20px;
+    font-weight: 600;
     margin-bottom: 20px;
 }
 
-.chart-header h3 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #1f2937;
-    margin: 0;
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.chart-header select {
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 8px 12px;
-    outline: none;
+.order-table th {
+    background: #f5f6fa;
+    padding: 12px;
+    text-align: left;
     font-size: 14px;
+}
+
+.order-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.order-table select,
+.order-table input {
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 0 10px;
+}
+
+.btn-add {
+    margin-top: 12px;
+    background: #ececfd;
+    color: #5b5ceb;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
     cursor: pointer;
-    background: #fff;
 }
 
-.chart-body {
-    position: relative;
-    height: 320px;
+.btn-add:hover {
+    background: #dcdcff;
 }
 
+.order-summary {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    font-size: 18px;
+}
 
+.action-row {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #6a5af9, #8f7afe);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+}
+.order-history-page {
+    margin-left: 50px;
+  padding: 24px 50px;
+}
+
+.order-history-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+}
+
+.order-history-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* ===== Table ===== */
+.order-history-table,
+.order-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-history-table th,
+.order-history-table td,
+.order-detail-table th,
+.order-detail-table td {
+  padding: 12px;
+  font-size: 14px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.order-history-table th {
+  background: #f5f6fa;
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.btn-view {
+  background: #6a5af9;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+/* ===== Modal ===== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background: #fff;
+  width: 70%;
+  margin: 10% auto;
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.close {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge.cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.btn-view {
+  background: #6a5af9;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: #ff5b5b;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+.btn-cancel:hover {
+  background: #e14c4c;
+}
+
+.btn-complete {
+    background: #28a745;
+    color: #fff;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 4px;
+}
+
+.btn-complete:hover {
+    background: #218838;
+}

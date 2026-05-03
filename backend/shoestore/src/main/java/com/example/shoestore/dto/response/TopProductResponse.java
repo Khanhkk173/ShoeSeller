@@ -4,13 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-public class DailyRevenueResponse {
-    private LocalDate date;
+public class TopProductResponse {
+    private String productName;
+    private Long quantitySold;
     private BigDecimal revenue;
-
-
 }

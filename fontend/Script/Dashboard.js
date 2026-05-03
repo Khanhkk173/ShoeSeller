@@ -64,21 +64,19 @@ async function loadOverviewStats() {
 
         const result = await response.json();
 
-        if (response.ok && result.data) {
-            const stats = result.data;
-
-            // Format số tiền có dấu chấm (VNĐ)
+        if (response.ok) {
+            // API trả về object trực tiếp (không có wrapper .data)
             document.getElementById("doanhthu").innerText =
-                stats.totalRevenue.toLocaleString('vi-VN') + " ₫";
+                Number(result.totalRevenue).toLocaleString('vi-VN') + " ₫";
 
             document.getElementById("donhang").innerText =
-                stats.totalOrders.toLocaleString('vi-VN');
+                Number(result.totalOrders).toLocaleString('vi-VN');
 
             document.getElementById("sanpham").innerText =
-                stats.totalProducts.toLocaleString('vi-VN');
+                Number(result.totalSold ?? result.totalProducts ?? 0).toLocaleString('vi-VN');
 
             document.getElementById("tonkho").innerText =
-                stats.stockQuantity.toLocaleString('vi-VN');
+                Number(result.currentStock ?? result.stockQuantity ?? 0).toLocaleString('vi-VN');
         }
     } catch (error) {
         console.error("Lỗi tải thống kê:", error);
@@ -112,19 +110,17 @@ let revenueChartInstance = null;
 
 async function loadRevenueChart(days = 7) {
     try {
-        const response = await fetch(`http://localhost:8080/api/statistics/revenue-chart?days=${days}`, {
+        const response = await fetch(`http://localhost:8080/api/statistics/revenue`, {
             method: 'GET',
             credentials: 'include'
         });
 
-        const result = await response.json();
-        console.log("Revenue chart response:", result);
-
-        if (!response.ok || !result.data) {
-            throw new Error(result.message || "Không tải được dữ liệu biểu đồ");
+        if (!response.ok) {
+            throw new Error("Không tải được dữ liệu biểu đồ");
         }
 
-        const chartData = result.data;
+        // API trả về array trực tiếp (không có wrapper .data)
+        const chartData = await response.json();
 
         const labels = chartData.map(item => {
             const date = new Date(item.date);

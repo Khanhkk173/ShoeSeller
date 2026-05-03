@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Chủ</title>
-    <link rel="stylesheet" href="../Style/Dashboard.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Thống Kê</title>
     <link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../Style/Statistics.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -24,7 +24,7 @@
             <form action="#">
                 <ul class="menu-list">
                     <li class="menu-item" id="menu-home">
-                        <a href="../html/Dashboard.html" class="menu-link active">
+                        <a href="../html/Dashboard.html" class="menu-link">
                             <i class="bx bx-home-alt"></i>
                             <span class="manu-lable">
                                 Trang Chủ
@@ -51,7 +51,7 @@
                         </a>
                     </li>
                     <li class="menu-item" id="menu-statistics">
-                        <a href="../html/Statistics.html" class="menu-link">
+                        <a href="../html/Statistics.html" class="menu-link active">
                             <i class="bx bx-chart-line"></i>
                             <span class="manu-lable">
                                 Thống Kê
@@ -83,7 +83,7 @@
     <div class="main-box">
         <div class="header">
             <a href="#">
-                <h2 class="trangchu">Trang Chủ</h2>
+                <h2 class="trangchu">Thống Kê</h2>
             </a>
             <div class="userlog">
                 <h2 id="welcome"></h2>
@@ -91,54 +91,59 @@
             </div>
         </div>
         <div class="container">
-            <div class="top-box">
-                <div class="content-top">
-                    <i class="bx bx-groceries"> </i>
-                    <div class="noidung">
-                        <label>Tổng doanh thu</label>
-                        <label id="doanhthu"></label>
+            <div class="statistics-page">
+
+                <!-- ====== TỔNG QUAN ====== -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <p>Doanh thu</p>
+                        <h3 id="totalRevenue">0 ₫</h3>
+                    </div>
+
+                    <div class="stat-card">
+                        <p>Số đơn hoàn thành</p>
+                        <h3 id="totalOrders">0</h3>
+                    </div>
+
+                    <div class="stat-card">
+                        <p>Sản phẩm đã bán</p>
+                        <h3 id="totalSold">0</h3>
+                    </div>
+
+                    <div class="stat-card">
+                        <p>Tồn kho hiện tại</p>
+                        <h3 id="currentStock">0</h3>
                     </div>
                 </div>
-                <div class="content-top">
-                    <i class="bx bx-cart-alt"> </i>
-                    <div class="noidung">
-                        <label>Tổng đơn hàng</label>
-                        <label id="donhang"></label>
-                    </div>
+
+                <!-- ====== BIỂU ĐỒ ====== -->
+                <div class="chart-box">
+                    <h3>Doanh thu theo thời gian</h3>
+                    <canvas id="revenueChart"></canvas>
                 </div>
-                <div class="content-top">
-                    <i class="bx bx-sneaker"> </i>
-                    <div class="noidung">
-                        <label>Tổng sản phẩm</label>
-                        <label id="sanpham"></label>
-                    </div>
+
+                <!-- ====== TOP SẢN PHẨM ====== -->
+                <div class="top-product-box">
+                    <h3>Sản phẩm bán chạy</h3>
+                    <table class="top-table">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng bán</th>
+                                <th>Doanh thu</th>  
+                            </tr>
+                        </thead>
+                        <tbody id="topProductBody">
+                            <!-- render bằng JS -->
+                        </tbody>
+                    </table>
                 </div>
-                <div class="content-top">
-                    <i class="bx bx-store-alt"> </i>
-                    <div class="noidung">
-                        <label>Hàng tồn kho</label>
-                        <label id="tonkho"></label>
-                    </div>
-                </div>
+
             </div>
-            <div class="bottom-box">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3>Doanh thu 7 ngày qua</h3>
-                        <select id="rangeSelect">
-                            <option value="7" selected>7 ngày</option>
-                            <option value="14">14 ngày</option>
-                            <option value="30">30 ngày</option>
-                        </select>
-                    </div>
-                    <div class="chart-body">
-                        <canvas id="revenueChart"></canvas>
-                    </div>
-                </div>
-            </div>
+            ``
         </div>
     </div>
-    <script src="../Script/Dashboard.js"></script>
+    <script src="../Script/Statistics.js"></script>
 </body>
 
 </html>

@@ -1,13 +1,12 @@
 package com.example.shoestore.controller;
 
-import com.example.shoestore.dto.request.OrderRequest;
-import com.example.shoestore.dto.response.ApiResponse;
+import com.example.shoestore.dto.request.CreateOrderRequest;
 import com.example.shoestore.entity.Order;
+import com.example.shoestore.entity.OrderDetail;
 import com.example.shoestore.service.OrderService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -17,32 +16,42 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<Order>>> getAll(
-            @RequestParam(required = false) String status) {
-        List<Order> orders = (status != null)
-                ? orderService.findByStatus(status)
-                : orderService.findAll();
-        return ResponseEntity.ok(ApiResponse.ok(orders));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Order>> getById(@PathVariable Integer id) {
-        return ResponseEntity.ok(ApiResponse.ok(orderService.findById(id)));
-    }
-
+    /* =====================
+       ✅ TẠO ĐƠN HÀNG
+    ====================== */
     @PostMapping
-    public ResponseEntity<ApiResponse<Order>> create(
-            @RequestBody @Valid OrderRequest request) {
-        Order order = orderService.create(request);
-        return ResponseEntity.status(201).body(ApiResponse.ok("Tạo đơn hàng thành công", order));
+    public Order createOrder(@RequestBody CreateOrderRequest request) {
+        return orderService.createOrder(request);
     }
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<ApiResponse<Order>> updateStatus(
-            @PathVariable Integer id,
-            @RequestParam String status) {
-        Order order = orderService.updateStatus(id, status);
-        return ResponseEntity.ok(ApiResponse.ok("Cập nhật trạng thái thành công", order));
+    /* =====================
+       ✅ LỊCH SỬ ĐƠN HÀNG
+    ====================== */
+    @GetMapping
+    public List<Order> getOrders() {
+        return orderService.getAllOrders();
+    }
+
+    /* =====================
+       ✅ CHI TIẾT ĐƠN HÀNG
+    ====================== */
+    @GetMapping("/{orderId}/details")
+    public List<OrderDetail> getOrderDetails(@PathVariable Integer orderId) {
+        return orderService.getOrderDetails(orderId);
+    }
+
+    /* =====================
+       ✅ HỦY ĐƠN + HOÀN KHO
+    ====================== */
+    @PutMapping("/{orderId}/cancel")
+    public String cancelOrder(@PathVariable Integer orderId) {
+        orderService.cancelOrder(orderId);
+        return "Huỷ đơn hàng thành công";
+    }
+
+    @PutMapping("/{orderId}/complete")
+    public String completeOrder(@PathVariable Integer orderId) {
+        orderService.completeOrder(orderId);
+        return "Hoàn thành đơn hàng thành công";
     }
 }

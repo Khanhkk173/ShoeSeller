@@ -1,8 +1,11 @@
 package com.example.shoestore.controller;
 
 import com.example.shoestore.dto.request.ImportRequest;
+import com.example.shoestore.dto.request.NewProductImportRequest;
 import com.example.shoestore.dto.response.ApiResponse;
-import com.example.shoestore.entity.Import;
+import com.example.shoestore.dto.response.ImportHistoryResponse;
+import com.example.shoestore.entity.Product;
+import com.example.shoestore.entity.ProductVariant;
 import com.example.shoestore.service.ImportService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,20 +20,30 @@ public class ImportController {
 
     private final ImportService importService;
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<Import>>> getAll() {
-        return ResponseEntity.ok(ApiResponse.ok(importService.findAll()));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Import>> getById(@PathVariable Integer id) {
-        return ResponseEntity.ok(ApiResponse.ok(importService.findById(id)));
-    }
-
     @PostMapping
-    public ResponseEntity<ApiResponse<Import>> create(
+    public ResponseEntity<ApiResponse<ProductVariant>> importStock(
             @RequestBody @Valid ImportRequest request) {
-        Import imp = importService.create(request);
-        return ResponseEntity.status(201).body(ApiResponse.ok("Nhập hàng thành công", imp));
+
+        ProductVariant variant = importService.importStock(request);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Nhập hàng thành công", variant)
+        );
+    }
+    @PostMapping("/new-product")
+    public ResponseEntity<ApiResponse<Product>> importNewProduct(
+            @RequestBody NewProductImportRequest request) {
+
+        Product product = importService.importNewProduct(request);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Nhập sản phẩm mới thành công", product)
+        );
+    }
+    @GetMapping("/history")
+    public ResponseEntity<ApiResponse<List<ImportHistoryResponse>>> getImportHistory() {
+        return ResponseEntity.ok(
+                ApiResponse.ok(importService.getImportHistory())
+        );
     }
 }

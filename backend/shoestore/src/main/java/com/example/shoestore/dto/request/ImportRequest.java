@@ -1,21 +1,15 @@
 package com.example.shoestore.dto.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import java.util.List;
 
 @Data
 public class ImportRequest {
-    @NotNull
-    private Integer supplierId;
 
     @NotNull
-    private List<ImportItemRequest> items;
+    private Integer variantId;
 
-    @Data
-    public static class ImportItemRequest {
-        private Integer variantId;
-        private Integer quantity;
-        private java.math.BigDecimal price;
-    }
+    @Min(1)
+    private Integer quantity;
 }
