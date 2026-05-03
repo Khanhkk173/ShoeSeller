@@ -21,16 +21,17 @@ public class ProductVariant {
     @JoinColumn(name = "product_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Product product;
+    private Product product;       // ← dòng này bị thiếu, gây ra lỗi
 
+    @Column(name = "size")
     private Integer size;
 
-    @Column(length = 50)
+    @Column(name = "color")
     private String color;
 
-    @Column(precision = 10, scale = 2)
+    @Column(name = "price", precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(columnDefinition = "INT DEFAULT 0")
-    private Integer stock = 0;
+    @Column(name = "stock")
+    private Integer stock;
 }

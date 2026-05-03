@@ -22,4 +22,26 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("brand") String brand,
             @Param("categoryId") Integer categoryId
     );
+
+    @Query("""
+    SELECT DISTINCT p FROM Product p
+    LEFT JOIN FETCH p.images
+    LEFT JOIN FETCH p.variants
+    WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))
+""")
+    List<Product> searchByName(@Param("name") String name);
+
+    /**
+     * Tìm theo tên + lọc theo category (tuỳ chọn mở rộng sau).
+     */
+    @Query("""
+    SELECT DISTINCT p FROM Product p
+    LEFT JOIN FETCH p.images
+    LEFT JOIN FETCH p.variants
+    WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))
+      AND p.category.id = :categoryId
+""")
+    List<Product> searchByNameAndCategory(@Param("name") String name,
+                                          @Param("categoryId") Integer categoryId);
+
 }

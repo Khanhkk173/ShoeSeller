@@ -49,75 +49,12 @@ async function logout() {
 }
 
 // ============================================================
-// DỮ LIỆU MẪU
-// Xóa phần này khi đã có backend — dùng fetchProducts() thay thế
+// API BASE URL
 // ============================================================
-const MOCK_PRODUCTS = [
-    {
-        id: 1,
-        name: "Paracetamol 500mg",
-        price: 25000,
-        stock: 320,
-        image: "https://placehold.co/400x400/e8e5ff/695cfe?text=Paracetamol",
-        category: "Thuốc giảm đau"
-    },
-    {
-        id: 2,
-        name: "Vitamin C 1000mg",
-        price: 85000,
-        stock: 5,
-        image: "https://placehold.co/400x400/dcfce7/166534?text=Vitamin+C",
-        category: "Vitamin"
-    },
-    {
-        id: 3,
-        name: "Amoxicillin 250mg",
-        price: 45000,
-        stock: 0,
-        image: "https://placehold.co/400x400/fee2e2/991b1b?text=Amoxicillin",
-        category: "Kháng sinh"
-    },
-    {
-        id: 4,
-        name: "Ibuprofen 400mg",
-        price: 32000,
-        stock: 150,
-        image: "https://placehold.co/400x400/e0f2fe/0369a1?text=Ibuprofen",
-        category: "Thuốc giảm đau"
-    },
-    {
-        id: 5,
-        name: "Vitamin B Complex",
-        price: 120000,
-        stock: 88,
-        image: "https://placehold.co/400x400/fef9c3/854d0e?text=Vitamin+B",
-        category: "Vitamin"
-    },
-    {
-        id: 6,
-        name: "Cetirizine 10mg",
-        price: 18000,
-        stock: 3,
-        image: "https://placehold.co/400x400/fdf4ff/7e22ce?text=Cetirizine",
-        category: "Dị ứng"
-    },
-    {
-        id: 7,
-        name: "Omeprazole 20mg",
-        price: 55000,
-        stock: 200,
-        image: "https://placehold.co/400x400/ecfdf5/065f46?text=Omeprazole",
-        category: "Dạ dày"
-    },
-    {
-        id: 8,
-        name: "Metformin 500mg",
-        price: 28000,
-        stock: 0,
-        image: "https://placehold.co/400x400/fff7ed/c2410c?text=Metformin",
-        category: "Tiểu đường"
-    },
-];
+const API_BASE = "http://localhost:8080";
+
+// Ảnh placeholder dùng khi không có ảnh thật
+const PLACEHOLDER_IMG = "https://placehold.co/400x400/f5f4ff/c4beff?text=No+Image";
 
 // ============================================================
 // TÌM KIẾM — event listeners
@@ -125,20 +62,15 @@ const MOCK_PRODUCTS = [
 const searchInput = document.getElementById("searchInput");
 const resultArea  = document.getElementById("resultArea");
 
-// Nhấn Enter để tìm
 searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") handleSearch();
 });
 
-// Tìm real-time (debounce 350ms)
 let debounceTimer;
 searchInput.addEventListener("input", () => {
     clearTimeout(debounceTimer);
     const q = searchInput.value.trim();
-    if (q.length === 0) {
-        showHint();
-        return;
-    }
+    if (q.length === 0) { showHint(); return; }
     debounceTimer = setTimeout(() => handleSearch(), 350);
 });
 
@@ -148,34 +80,40 @@ searchInput.addEventListener("input", () => {
 function handleSearch() {
     const query = searchInput.value.trim();
     if (!query) { showHint(); return; }
-
     showLoading();
-
-    // ----- DÙNG API THẬT: bỏ comment đoạn dưới, xóa setTimeout + MOCK -----
-    // fetchProducts(query);
-    // -----------------------------------------------------------------------
-
-    // Giả lập delay API với dữ liệu mẫu
-    setTimeout(() => {
-        const results = MOCK_PRODUCTS.filter(p =>
-            p.name.toLowerCase().includes(query.toLowerCase())
-        );
-        renderResults(results, query);
-    }, 400);
+    fetchProducts(query);
 }
 
 // ============================================================
-// GỌI API BACKEND (dùng khi backend sẵn sàng)
+// GỌI API BACKEND
 // ============================================================
 async function fetchProducts(query) {
     try {
         const res = await fetch(
-            `http://localhost:8080/api/products/search?name=${encodeURIComponent(query)}`,
+            `${API_BASE}/api/products/search?name=${encodeURIComponent(query)}`,
             { credentials: 'include' }
         );
-        if (!res.ok) throw new Error("Lỗi server");
+
+        if (!res.ok) {
+            const errText = await res.text();
+            console.error("Lỗi server: " + res.status, errText);
+            throw new Error("Lỗi server: " + res.status);
+        }
+
         const data = await res.json();
-        renderResults(data, query);
+
+        const mapped = data.map(p => ({
+            id:       p.productId,
+            name:     p.name     || "Không có tên",
+            price:    p.price    ?? 0,
+            stock:    p.stock    ?? 0,
+            // FIX: Nếu image là null/undefined/"null" → dùng placeholder luôn
+            // Tránh trình duyệt tạo URL sai kiểu ".../html/null"
+            image:    (p.image && p.image !== "null") ? p.image : PLACEHOLDER_IMG,
+            category: p.category || ""
+        }));
+
+        renderResults(mapped, query);
     } catch (err) {
         console.error("Lỗi tìm kiếm:", err);
         renderError();
@@ -189,9 +127,7 @@ function renderResults(products, query) {
     if (products.length === 0) {
         resultArea.innerHTML = `
             <div class="empty-state">
-                <div class="empty-icon">
-                    <i class="bx bx-search-alt"></i>
-                </div>
+                <div class="empty-icon"><i class="bx bx-search-alt"></i></div>
                 <h3>Không tìm thấy sản phẩm</h3>
                 <p>Không có sản phẩm nào khớp với "<strong>${escHtml(query)}</strong>"<br>
                 Thử kiểm tra lại chính tả hoặc tìm với từ khóa khác.</p>
@@ -204,8 +140,9 @@ function renderResults(products, query) {
         return `
         <div class="product-card" style="animation-delay:${0.04 + i * 0.05}s">
             <div class="product-img-wrap">
-                <img src="${p.image}" alt="${escHtml(p.name)}"
-                     onerror="this.src='https://placehold.co/400x400/f5f4ff/c4beff?text=No+Image'">
+                <img src="${p.image}"
+                     alt="${escHtml(p.name)}"
+                     onerror="this.onerror=null; this.src='${PLACEHOLDER_IMG}'">
                 <span class="stock-badge ${cls}">${badge}</span>
             </div>
             <div class="product-info">
@@ -231,9 +168,7 @@ function renderResults(products, query) {
 function renderError() {
     resultArea.innerHTML = `
         <div class="empty-state">
-            <div class="empty-icon">
-                <i class="bx bx-error-circle"></i>
-            </div>
+            <div class="empty-icon"><i class="bx bx-error-circle"></i></div>
             <h3>Đã xảy ra lỗi</h3>
             <p>Không thể kết nối đến máy chủ. Vui lòng thử lại sau.</p>
         </div>`;
@@ -273,11 +208,11 @@ function stockInfo(qty) {
 }
 
 function formatPrice(n) {
-    return n.toLocaleString('vi-VN') + ' đ';
+    return Number(n).toLocaleString('vi-VN') + ' đ';
 }
 
 function escHtml(str) {
-    return str.replace(/[&<>"']/g, c =>
+    return String(str).replace(/[&<>"']/g, c =>
         ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
     );
 }

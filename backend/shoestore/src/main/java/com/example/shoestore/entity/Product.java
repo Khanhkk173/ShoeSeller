@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;          // FIX: import Set
 
 @Entity
 @Table(name = "products")
@@ -36,18 +37,22 @@ public class Product {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    // FIX: Đổi List → Set để tránh MultipleBagFetchException
+    // Hibernate không cho phép JOIN FETCH 2 collection kiểu List cùng lúc.
+    // Đổi một trong hai thành Set là cách đơn giản và an toàn nhất.
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<ProductVariant> variants;
+    private Set<ProductVariant> variants;    // ← đổi từ List sang Set
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<ProductImage> images;
+    private List<ProductImage> images;       // giữ List cho images (chỉ cần 1 cái là Set)
 
     @PrePersist
     public void prePersist() {
         if (createdAt == null) createdAt = LocalDateTime.now();
     }
+
 }
