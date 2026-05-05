@@ -1,4 +1,4 @@
-const API_BASE = "earnest-truth-production.up.railway.app";
+const API_BASE = "https://earnest-truth-production.up.railway.app";
 // Toggle sidebar
 const sidebar = document.querySelector(".sidebar");
 const sidebarToggleBtn = document.querySelector(".sidebar-toggle");
@@ -34,7 +34,7 @@ async function logout() {
 
     try {
         // Gọi API logout từ backend (tốt hơn là xóa session)
-        await fetch('earnest-truth-production.up.railway.app/api/auth/logout', {
+        await fetch('https://earnest-truth-production.up.railway.app/api/auth/logout', {
             method: 'POST',
             credentials: 'include'   // quan trọng nếu backend dùng HttpSession
         });
@@ -56,7 +56,7 @@ async function logout() {
 let variants = [];
 
 async function loadVariants() {
-    const res = await fetch("earnest-truth-production.up.railway.app/api/products/import");
+    const res = await fetch("https://earnest-truth-production.up.railway.app/api/products/import");
     const result = await res.json();
 
     variants = [];
@@ -145,7 +145,7 @@ async function createOrder() {
         });
     });
 
-    const res = await fetch("earnest-truth-production.up.railway.app/api/orders", {
+    const res = await fetch("https://earnest-truth-production.up.railway.app/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items })
@@ -162,7 +162,7 @@ async function createOrder() {
     }
 }
 async function loadOrders() {
-    const res = await fetch("earnest-truth-production.up.railway.app/api/orders");
+    const res = await fetch("https://earnest-truth-production.up.railway.app/api/orders");
 
     if (!res.ok) {
         console.error("Lỗi lấy danh sách đơn hàng");
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", loadOrders);
 
 async function viewOrderDetail(orderId) {
 
-    const res = await fetch(`earnest-truth-production.up.railway.app/api/orders/${orderId}/details`);
+    const res = await fetch(`https://earnest-truth-production.up.railway.app/api/orders/${orderId}/details`);
     const items = await res.json();
 
     const tbody = document.getElementById("orderDetailBody");
@@ -233,7 +233,7 @@ async function cancelOrder(orderId) {
     if (!confirm("Bạn có chắc muốn huỷ đơn hàng này?")) return;
 
     const res = await fetch(
-        `earnest-truth-production.up.railway.app/api/orders/${orderId}/cancel`,
+        `https://earnest-truth-production.up.railway.app/api/orders/${orderId}/cancel`,
         { method: "PUT" }
     );
 
@@ -305,4 +305,3 @@ async function completeOrder(orderId) {
         alert(msg);
     }
 }
-

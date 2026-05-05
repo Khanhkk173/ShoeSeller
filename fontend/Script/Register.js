@@ -37,7 +37,7 @@ async function register() {
     };
 
     try {
-        const response = await fetch('earnest-truth-production.up.railway.app/api/auth/register', {
+        const response = await fetch('https://earnest-truth-production.up.railway.app/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
