@@ -35,7 +35,7 @@ async function logout() {
 
     try {
         // Gọi API logout từ backend (tốt hơn là xóa session)
-        await fetch('http://localhost:8080/api/auth/logout', {
+        await fetch('earnest-truth-production.up.railway.app/api/auth/logout', {
             method: 'POST',
             credentials: 'include'   // quan trọng nếu backend dùng HttpSession
         });
@@ -57,7 +57,7 @@ async function logout() {
 
 async function loadOverviewStats() {
     try {
-        const response = await fetch('http://localhost:8080/api/statistics/overview', {
+        const response = await fetch('earnest-truth-production.up.railway.app/api/statistics/overview', {
             method: 'GET',
             credentials: 'include'   // nếu dùng session
         });
@@ -110,7 +110,7 @@ let revenueChartInstance = null;
 
 async function loadRevenueChart(days = 7) {
     try {
-        const response = await fetch(`http://localhost:8080/api/statistics/revenue`, {
+        const response = await fetch(`earnest-truth-production.up.railway.app/api/statistics/revenue`, {
             method: 'GET',
             credentials: 'include'
         });

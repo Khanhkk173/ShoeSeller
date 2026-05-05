@@ -33,7 +33,7 @@ async function logout() {
 
     try {
         // Gọi API logout từ backend (tốt hơn là xóa session)
-        await fetch('http://localhost:8080/api/auth/logout', {
+        await fetch('earnest-truth-production.up.railway.app/api/auth/logout', {
             method: 'POST',
             credentials: 'include'   // quan trọng nếu backend dùng HttpSession
         });
@@ -75,7 +75,7 @@ topProducts.forEach(p => {
 });
 // Chart sẽ được vẽ bởi API thực - không tạo mock chart ở đây
 
-const API = "http://localhost:8080/api/statistics";
+const API = "earnest-truth-production.up.railway.app/api/statistics";
 
 // Tổng quan
 fetch(`${API}/overview`)

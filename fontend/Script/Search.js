@@ -34,7 +34,7 @@ async function logout() {
     if (!confirm("Bạn có chắc muốn đăng xuất không?")) return;
 
     try {
-        await fetch('http://localhost:8080/api/auth/logout', {
+        await fetch('earnest-truth-production.up.railway.app/api/auth/logout', {
             method: 'POST',
             credentials: 'include'
         });
@@ -51,7 +51,7 @@ async function logout() {
 // ============================================================
 // API BASE URL
 // ============================================================
-const API_BASE = "http://localhost:8080";
+const API_BASE = "earnest-truth-production.up.railway.app";
 
 // Ảnh placeholder dùng khi không có ảnh thật
 const PLACEHOLDER_IMG = "https://placehold.co/400x400/f5f4ff/c4beff?text=No+Image";

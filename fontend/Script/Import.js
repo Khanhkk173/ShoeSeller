@@ -27,7 +27,7 @@ if (currentUser) {
 async function logout() {
     if (!confirm("Bạn có chắc muốn đăng xuất không?")) return;
     try {
-        await fetch("http://localhost:8080/api/auth/logout", {
+        await fetch("earnest-truth-production.up.railway.app/api/auth/logout", {
             method: "POST",
             credentials: "include"
         });
@@ -74,7 +74,7 @@ async function uploadImages(files) {
             const formData = new FormData();
             formData.append("file", file); // phải đúng tên "file"
 
-            const res = await fetch("http://localhost:8080/api/uploads/product-image", {
+            const res = await fetch("earnest-truth-production.up.railway.app/api/uploads/product-image", {
                 method: "POST",
                 body: formData,
                 credentials: "include"
@@ -88,7 +88,7 @@ async function uploadImages(files) {
             // Backend trả plain string, không phải JSON
             const urlPath = await res.text();
             // Ghép full URL để lưu vào DB
-            urls.push("http://localhost:8080" + urlPath.trim());
+            urls.push("earnest-truth-production.up.railway.app" + urlPath.trim());
         } catch (err) {
             console.error("Lỗi upload file:", file.name, err);
         }
@@ -100,7 +100,7 @@ async function uploadImages(files) {
 // ================== LOAD VARIANTS ==================
 async function loadVariants() {
     try {
-        const res = await fetch("http://localhost:8080/api/products/import");
+        const res = await fetch("earnest-truth-production.up.railway.app/api/products/import");
         const result = await res.json();
         const select = document.getElementById("variantSelect");
         select.innerHTML = "";
@@ -131,7 +131,7 @@ async function submitImport() {
     }
 
     try {
-        const res = await fetch("http://localhost:8080/api/imports", {
+        const res = await fetch("earnest-truth-production.up.railway.app/api/imports", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ variantId: Number(variantId), quantity })
@@ -180,7 +180,7 @@ async function submitNewProduct() {
 
     // Bước 2: Gửi data sản phẩm kèm imageUrls
     try {
-        const res = await fetch("http://localhost:8080/api/imports/new-product", {
+        const res = await fetch("earnest-truth-production.up.railway.app/api/imports/new-product", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -215,7 +215,7 @@ async function submitNewProduct() {
 // ================== LOAD LỊCH SỬ NHẬP HÀNG ==================
 async function loadImportHistory() {
     try {
-        const res = await fetch("http://localhost:8080/api/imports/history");
+        const res = await fetch("earnest-truth-production.up.railway.app/api/imports/history");
         const result = await res.json();
         const tbody = document.getElementById("importHistoryBody");
         tbody.innerHTML = "";
@@ -242,7 +242,7 @@ let allProducts = [];
 
 async function loadProducts() {
     try {
-        const res = await fetch("http://localhost:8080/api/products/import");
+        const res = await fetch("earnest-truth-production.up.railway.app/api/products/import");
         const result = await res.json();
         if (!result.data) return;
         allProducts = result.data;
@@ -298,7 +298,7 @@ async function deleteProduct(productId, productName) {
     if (!confirm(`Bạn có chắc muốn xóa "${productName}"?\nThao tác này không thể hoàn tác!`)) return;
 
     try {
-        const res = await fetch(`http://localhost:8080/api/products/${productId}`, { method: "DELETE" });
+        const res = await fetch(`earnest-truth-production.up.railway.app/api/products/${productId}`, { method: "DELETE" });
         const result = await res.json();
         if (res.ok) {
             alert(`Đã xóa "${productName}" thành công!`);
@@ -318,7 +318,7 @@ async function deleteProduct(productId, productName) {
 // ================== LỊCH SỬ XÓA ==================
 async function loadDeletedProducts() {
     try {
-        const res = await fetch("http://localhost:8080/api/deleted-products");
+        const res = await fetch("earnest-truth-production.up.railway.app/api/deleted-products");
         const result = await res.json();
         const tbody = document.getElementById("deletedProductBody");
         tbody.innerHTML = "";
