@@ -9,5 +9,5 @@ public interface ImportHistoryRepository extends JpaRepository<ImportHistory, In
 
     List<ImportHistory> findAllByOrderByImportedAtDesc();
 
-    void deleteByVariant(ProductVariant variant); // ✅ Thêm dòng này
+    void deleteByVariant(ProductVariant variant);
 }
